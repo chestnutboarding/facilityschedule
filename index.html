@@ -51,9 +51,11 @@
                     </a>
                 </div>
                 <div class="flex items-center justify-center space-x-3 flex-wrap">
-                    <a href="#" class="text-base font-medium text-gray-600 hover:text-[#1a73e8] transition py-2 px-1">Schedule</a>
+                    <button onclick="switchTab('schedule')" id="nav-schedule" class="text-base font-medium text-[#1a73e8] hover:text-[#1a73e8] transition py-2 px-1">Schedule</button>
                     <span class="text-base font-medium text-gray-400">|</span>
-                    <button onclick="openPhotosModal()" class="text-base font-medium text-gray-600 hover:text-[#1a73e8] transition cursor-pointer py-2 px-1">Photos</button>
+                    <button onclick="switchTab('about')" id="nav-about" class="text-base font-medium text-gray-600 hover:text-[#1a73e8] transition py-2 px-1">About Us</button>
+                    <span class="text-base font-medium text-gray-400">|</span>
+                    <button onclick="switchTab('photos')" id="nav-photos" class="text-base font-medium text-gray-600 hover:text-[#1a73e8] transition cursor-pointer py-2 px-1">Photos</button>
                     <span class="text-base font-medium text-gray-400">|</span>
                     <button onclick="openModal()" class="text-base font-medium text-gray-600 hover:text-[#1a73e8] transition cursor-pointer py-2 px-1">Contact</button>
                 </div>
@@ -63,81 +65,276 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <!-- Calendar Section -->
-        <div class="bg-white/75 backdrop-blur-md p-2 sm:p-4 rounded-xl shadow-sm border border-gray-200">
-            <div class="mb-4 px-2 pt-2 pb-1 border-b border-gray-100/50">
-                <h1 class="text-base sm:text-lg font-medium text-gray-800 flex flex-col lg:flex-row lg:items-center">
-                    Facility Schedule 
-                    <span class="hidden lg:inline text-gray-400 mx-2">|</span> 
-                    <span class="text-gray-600 font-normal text-sm sm:text-base mt-1 lg:mt-0">View availability, upcoming events, and boarding schedules for Chestnut Boarding.</span>
-                </h1>
+        
+        <!-- Schedule View -->
+        <div id="scheduleView" class="block">
+            <!-- Calendar Section -->
+            <div class="bg-white/75 backdrop-blur-md p-2 sm:p-4 rounded-xl shadow-sm border border-gray-200">
+                <div class="calendar-container">
+                    <iframe 
+                        src="https://calendar.google.com/calendar/embed?src=chestnutboarding%40gmail.com&ctz=UTC&showTitle=0&showPrint=0&showTabs=1&showCalendars=0&showTz=1" 
+                        style="border-width:0" 
+                        frameborder="0" 
+                        scrolling="no">
+                    </iframe>
+                </div>
             </div>
-            <div class="calendar-container">
-                <iframe 
-                    src="https://calendar.google.com/calendar/embed?src=chestnutboarding%40gmail.com&ctz=UTC&showTitle=0&showPrint=0&showTabs=1&showCalendars=0&showTz=1" 
-                    style="border-width:0" 
-                    frameborder="0" 
-                    scrolling="no">
-                </iframe>
+
+            <!-- Information Grid -->
+            <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
+                        <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Real-time Updates
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Our schedule is updated daily. Check back often for the latest availability and changes.
+                    </p>
+                </div>
+
+                <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
+                        <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Booking Requests
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        To request a boarding slot shown as available, please email us at <a href="mailto:chestnutboarding@gmail.com?subject=Boarding%20Request&body=Hi%20Tyler%2C%0A%0AI%20would%20like%20to%20request%20a%20boarding%20slot.%0A%0A1.%20Dropoff%20date%20%26%20time%3A%20%0A2.%20Pickup%20date%20%26%20time%3A%20%0A3.%20Owner%20name%3A%20%0A4.%20Phone%20number%3A%20%0A5.%20Are%20the%20vaccines%20up%20to%20date%20and%20do%20you%20have%20a%20current%20City%20of%20Colorado%20Springs%20Pet%20License%3F%20%0A6.%20Have%20your%20dogs%20ever%20shown%20aggression%20towards%20other%20dogs%20or%20humans%3F%20%0A7.%20Breed%2C%20age%2C%20gender(s)%3F%20%0A8.%20Are%20they%20spayed%2Fneutered%3F%20%0A9.%20Do%20any%20of%20the%20dogs%20require%20any%20medications%3F%20%0A%0AThanks!" target="_blank" rel="noopener noreferrer" class="text-[#1a73e8] hover:underline font-medium">chestnutboarding@gmail.com</a> or call/text <a href="tel:7196418340" onclick="handleSmartPhoneClick(event, '719-641-8340', this)" class="text-[#1a73e8] hover:underline font-medium relative inline-block">719-641-8340<span class="phone-tooltip absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 transition-opacity duration-300 pointer-events-none hidden whitespace-nowrap">Copied!</span></a>.
+                    </p>
+                </div>
+
+                <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
+                        <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Facility Rules
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Please ensure all vaccinations are up to date before arriving for your scheduled slot.
+                    </p>
+                    <div class="text-gray-500 text-xs leading-relaxed mt-3 pt-3 border-t border-gray-200">
+                        <p class="mb-1">This facility is regulated by the Colorado Department of Agriculture's Pet Animal Care Facilities Act Program.</p>
+                        <p><strong>Address:</strong> 305 Interlocken Parkway, Broomfield, CO 80021</p>
+                        <p><strong>Phone:</strong> <a href="tel:3038699146" class="text-[#1a73e8] hover:underline">(303) 869-9146</a></p>
+                        <p><strong>Website:</strong> <a href="https://ag.colorado.gov/ics/pacfa" target="_blank" rel="noopener noreferrer" class="text-[#1a73e8] hover:underline break-all">https://ag.colorado.gov/ics/pacfa</a></p>
+                    </div>
+                </div>
+
+                <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
+                        <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Boarding Agreement & Plans
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                        Please feel free to view our boarding agreement or contingency plan at any time via Google Docs.
+                    </p>
+                    <div class="flex flex-col items-start gap-2">
+                        <a href="https://docs.google.com/document/d/1Nat8vBiutp2nUZLU_r6Nx1ij0sVBVnhCUZihsFwMVb0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-medium text-[#1a73e8] hover:underline">
+                            View Agreement
+                            <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                        <a href="https://docs.google.com/document/d/1KikvEDPsf79esrLueXGB7U7wN4RkcJ42F6cXfNPkHsg/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-medium text-[#1a73e8] hover:underline">
+                            View Contingency Plan
+                            <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Information Grid -->
-        <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
-                    <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Real-time Updates
-                </h3>
-                <p class="text-gray-600 text-sm leading-relaxed">
-                    Our schedule is updated daily. Check back often for the latest availability and changes.
-                </p>
+        <!-- About Us View -->
+        <div id="aboutView" class="hidden">
+            <div class="bg-white/75 backdrop-blur-md p-8 rounded-xl shadow-sm border border-gray-200">
+                <h1 class="text-2xl sm:text-3xl font-medium text-gray-900 mb-6 border-b border-gray-100/50 pb-4">About Chestnut Boarding</h1>
+                
+                <div class="space-y-6 text-gray-700 leading-relaxed">
+                    <p class="text-lg">
+                        At Chestnut Boarding, we believe your dog deserves a vacation, not a kennel. Licensed by the Colorado Department of Agriculture (PACFA) , we provide an exclusive, boutique boarding experience entirely within our primary residence. By strictly limiting our care to a maximum of three client dogs at any time , we ensure your pet receives the personalized attention, comfort, and direct supervision they crave in a calm, home-centered environment.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                        <div>
+                            <h2 class="text-xl font-medium text-gray-900 mb-3 flex items-center">
+                                <svg class="h-6 w-6 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                                Our Philosophy
+                            </h2>
+                            <p>We believe that boarding shouldn't be a stressful experience for pets or their owners. We treat every guest with the same care, attention, and respect that we give our own pets. From personalized feeding schedules to dedicated playtime, your pet's well-being is our top priority.</p>
+                        </div>
+                        
+                        <div>
+                            <h2 class="text-xl font-medium text-gray-900 mb-3 flex items-center">
+                                <svg class="h-6 w-6 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                                Our Facility
+                            </h2>
+                            <p>Our facility is designed with safety and comfort in mind. We maintain strict hygiene protocols, climate-controlled environments, and secure play areas. We also require all guests to have up-to-date vaccinations to ensure the health of our entire boarding community.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 bg-[#f8f9fa] p-6 sm:p-8 rounded-xl border border-gray-200">
+                        <!-- Left-aligned Header above all profiles -->
+                        <h2 class="text-2xl font-medium text-gray-900 mb-8 text-center sm:text-left">Meet Us</h2>
+                        
+                        <!-- Container for profiles - stacking them vertically -->
+                        <div class="space-y-10">
+                            <!-- Profile 1: Tyler Helton -->
+                            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 sm:gap-8">
+                                <img src="https://i.imgur.com/npXGMTF.jpeg" alt="Tyler Helton" class="w-auto max-w-[10rem] sm:max-w-[12rem] h-auto rounded-xl shadow-md border border-gray-200 flex-shrink-0">
+                                <div class="text-center sm:text-left sm:pt-1">
+                                    <h3 class="text-xl text-[#1a73e8] font-medium mb-3">Tyler Helton</h3>
+                                    <p class="text-gray-700 leading-relaxed">
+                                        Welcome! I'm Tyler, the owner and operator of Chestnut Boarding. Having grown up surrounded by animals, I have always been passionate about taking care of them. I look forward to providing a safe, comfortable, and loving environment for your pets here in Colorado Springs. In my free time I enjoy reading and writing. If you have any questions, or would like to tour the facility or see if we're a good fit for your dog, feel free to give me a call at 719-641-8340, or you can email us at chestnutboarding@gmail.com.
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- Future profiles can be added here following the same structure -->
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
-                    <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    Booking Requests
-                </h3>
-                <p class="text-gray-600 text-sm leading-relaxed">
-                    To request a boarding slot shown as available, please email us at chestnutboarding@gmail.com or call/text 719-641-8340.
-                </p>
-            </div>
+            <!-- Information Grid (Duplicated for About Us View) -->
+            <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
+                        <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Real-time Updates
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Our schedule is updated daily. Check back often for the latest availability and changes.
+                    </p>
+                </div>
 
-            <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
-                    <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    Facility Rules
-                </h3>
-                <p class="text-gray-600 text-sm leading-relaxed">
-                    Please ensure all vaccinations are up to date before arriving for your scheduled slot.
-                </p>
-            </div>
+                <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
+                        <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Booking Requests
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        To request a boarding slot shown as available, please email us at <a href="mailto:chestnutboarding@gmail.com?subject=Boarding%20Request&body=Hi%20Tyler%2C%0A%0AI%20would%20like%20to%20request%20a%20boarding%20slot.%0A%0A1.%20Dropoff%20date%20%26%20time%3A%20%0A2.%20Pickup%20date%20%26%20time%3A%20%0A3.%20Owner%20name%3A%20%0A4.%20Phone%20number%3A%20%0A5.%20Are%20the%20vaccines%20up%20to%20date%20and%20do%20you%20have%20a%20current%20City%20of%20Colorado%20Springs%20Pet%20License%3F%20%0A6.%20Have%20your%20dogs%20ever%20shown%20aggression%20towards%20other%20dogs%20or%20humans%3F%20%0A7.%20Breed%2C%20age%2C%20gender(s)%3F%20%0A8.%20Are%20they%20spayed%2Fneutered%3F%20%0A9.%20Do%20any%20of%20the%20dogs%20require%20any%20medications%3F%20%0A%0AThanks!" target="_blank" rel="noopener noreferrer" class="text-[#1a73e8] hover:underline font-medium">chestnutboarding@gmail.com</a> or call/text <a href="tel:7196418340" onclick="handleSmartPhoneClick(event, '719-641-8340', this)" class="text-[#1a73e8] hover:underline font-medium relative inline-block">719-641-8340<span class="phone-tooltip absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 transition-opacity duration-300 pointer-events-none hidden whitespace-nowrap">Copied!</span></a>.
+                    </p>
+                </div>
 
-            <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
-                <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
-                    <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    Boarding Agreement
-                </h3>
-                <p class="text-gray-600 text-sm leading-relaxed mb-3">
-                    Please review our boarding agreement prior to your scheduled arrival.
-                </p>
-                <a href="https://docs.google.com/document/d/1Nat8vBiutp2nUZLU_r6Nx1ij0sVBVnhCUZihsFwMVb0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-medium text-[#1a73e8] hover:underline py-2">
-                    View Agreement
-                    <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                </a>
+                <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
+                        <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Facility Rules
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Please ensure all vaccinations are up to date before arriving for your scheduled slot.
+                    </p>
+                    <div class="text-gray-500 text-xs leading-relaxed mt-3 pt-3 border-t border-gray-200">
+                        <p class="mb-1">This facility is regulated by the Colorado Department of Agriculture's Pet Animal Care Facilities Act Program.</p>
+                        <p><strong>Address:</strong> 305 Interlocken Parkway, Broomfield, CO 80021</p>
+                        <p><strong>Phone:</strong> <a href="tel:3038699146" class="text-[#1a73e8] hover:underline">(303) 869-9146</a></p>
+                        <p><strong>Website:</strong> <a href="https://ag.colorado.gov/ics/pacfa" target="_blank" rel="noopener noreferrer" class="text-[#1a73e8] hover:underline break-all">https://ag.colorado.gov/ics/pacfa</a></p>
+                    </div>
+                </div>
+
+                <div class="bg-white/75 backdrop-blur-md p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-base font-medium text-gray-900 mb-2 flex items-center">
+                        <svg class="h-5 w-5 mr-2 text-[#1a73e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Boarding Agreement & Plans
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                        Please feel free to view our boarding agreement or contingency plan at any time via Google Docs.
+                    </p>
+                    <div class="flex flex-col items-start gap-2">
+                        <a href="https://docs.google.com/document/d/1Nat8vBiutp2nUZLU_r6Nx1ij0sVBVnhCUZihsFwMVb0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-medium text-[#1a73e8] hover:underline">
+                            View Agreement
+                            <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                        <a href="https://docs.google.com/document/d/1KikvEDPsf79esrLueXGB7U7wN4RkcJ42F6cXfNPkHsg/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-medium text-[#1a73e8] hover:underline">
+                            View Contingency Plan
+                            <svg class="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Photos View -->
+        <div id="photosView" class="hidden">
+            <div class="bg-white/75 backdrop-blur-md p-8 rounded-xl shadow-sm border border-gray-200">
+                <h1 class="text-2xl sm:text-3xl font-medium text-gray-900 mb-6 border-b border-gray-100/50 pb-4">Facility & Guests</h1>
+                <p class="text-gray-700 leading-relaxed mb-8">Take a look around Chestnut Boarding and see some of the happy faces that have stayed with us!</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/cPlun05.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/2G4duPM.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/sYR0cQw.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/iyH9Nyb.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/9d1RdYn.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/te38jbL.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/Ao5jDR2.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/i1sjwwf.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/Ew9F60Q.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/wbSX7hY.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/Vlh47pQ.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/BcRCkbs.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/p7qYLIa.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/0Qor7xT.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
+                        <img src="https://i.imgur.com/F6uMcYr.jpeg" alt="Chestnut Boarding Photo" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300">
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <footer class="bg-white/75 backdrop-blur-md border-t border-gray-200 mt-16 py-8">
@@ -146,34 +343,6 @@
             <p class="text-gray-400 text-xs mt-1">Contact: chestnutboarding@gmail.com | 719-641-8340</p>
         </div>
     </footer>
-
-    <!-- Photos Modal -->
-    <div id="photosModal" class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-40 overflow-y-auto h-full w-full flex items-center justify-center backdrop-blur-sm">
-        <div class="bg-white/80 backdrop-blur-xl p-8 rounded-2xl shadow-xl max-w-md w-full mx-4 relative border border-gray-100">
-            <button onclick="closePhotosModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-700 focus:outline-none transition py-2 px-2">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            <h2 class="text-xl font-medium text-gray-900 mb-4">View Facility Photos</h2>
-            
-            <div class="text-gray-600 space-y-4 text-sm">
-                <p>Our facility photos and guest updates are hosted securely on a shared Google Photos album. Clicking below will open the gallery in a new tab.</p>
-            </div>
-
-            <div class="mt-8 flex justify-end space-x-3">
-                <button onclick="closePhotosModal()" class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg hover:bg-gray-50 transition">
-                    Cancel
-                </button>
-                <a href="https://photos.app.goo.gl/XRUziLvqvneiRajC6" target="_blank" rel="noopener noreferrer" class="bg-[#1a73e8] border border-transparent text-white font-medium py-2 px-6 rounded-lg hover:bg-blue-600 transition inline-flex items-center">
-                    Open Google Photos
-                    <svg class="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </div>
 
     <!-- Contact Modal -->
     <div id="contactModal" class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-40 overflow-y-auto h-full w-full flex items-center justify-center backdrop-blur-sm">
@@ -193,7 +362,7 @@
                         <svg class="h-5 w-5 text-[#1a73e8] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-                        <a href="mailto:chestnutboarding@gmail.com" target="_blank" id="emailLink" class="text-base font-medium text-[#1a73e8] hover:underline truncate py-1">chestnutboarding@gmail.com</a>
+                        <a href="mailto:chestnutboarding@gmail.com?subject=Boarding%20Request&body=Hi%20Tyler%2C%0A%0AI%20would%20like%20to%20request%20a%20boarding%20slot.%0A%0A1.%20Dropoff%20date%20%26%20time%3A%20%0A2.%20Pickup%20date%20%26%20time%3A%20%0A3.%20Owner%20name%3A%20%0A4.%20Phone%20number%3A%20%0A5.%20Are%20the%20vaccines%20up%20to%20date%20and%20do%20you%20have%20a%20current%20City%20of%20Colorado%20Springs%20Pet%20License%3F%20%0A6.%20Have%20your%20dogs%20ever%20shown%20aggression%20towards%20other%20dogs%20or%20humans%3F%20%0A7.%20Breed%2C%20age%2C%20gender(s)%3F%20%0A8.%20Are%20they%20spayed%2Fneutered%3F%20%0A9.%20Do%20any%20of%20the%20dogs%20require%20any%20medications%3F%20%0A%0AThanks!" target="_blank" rel="noopener noreferrer" id="emailLink" class="text-base font-medium text-[#1a73e8] hover:underline truncate py-1">chestnutboarding@gmail.com</a>
                     </div>
                     <button onclick="copyEmail()" class="ml-3 p-2 text-gray-500 hover:text-[#1a73e8] hover:bg-blue-50 rounded-lg transition flex-shrink-0" title="Copy Email">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -208,7 +377,7 @@
                         <svg class="h-5 w-5 text-[#1a73e8] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>
-                        <a href="tel:7196418340" id="phoneLink" class="text-base font-medium text-[#1a73e8] hover:underline truncate py-1">719-641-8340</a>
+                        <a href="tel:7196418340" id="phoneLink" onclick="handleSmartPhoneClick(event, '719-641-8340', this)" class="text-base font-medium text-[#1a73e8] hover:underline truncate py-1 relative inline-block">719-641-8340<span class="phone-tooltip absolute bottom-full mb-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 transition-opacity duration-300 pointer-events-none hidden whitespace-nowrap">Copied!</span></a>
                     </div>
                     <button onclick="copyPhone()" class="ml-3 p-2 text-gray-500 hover:text-[#1a73e8] hover:bg-blue-50 rounded-lg transition flex-shrink-0" title="Copy Phone Number">
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -236,28 +405,47 @@
             document.getElementById('contactModal').classList.add('hidden');
         }
 
-        function openPhotosModal() {
-            document.getElementById('photosModal').classList.remove('hidden');
-        }
-
-        function closePhotosModal() {
-            document.getElementById('photosModal').classList.add('hidden');
-        }
-
         window.onclick = function(event) {
             const contactModal = document.getElementById('contactModal');
-            const photosModal = document.getElementById('photosModal');
             
             if (event.target === contactModal) {
                 closeModal();
             }
-            if (event.target === photosModal) {
-                closePhotosModal();
+        }
+
+        function switchTab(tab) {
+            const views = ['scheduleView', 'aboutView', 'photosView'];
+            const navs = ['nav-schedule', 'nav-about', 'nav-photos'];
+
+            // Hide all views
+            views.forEach(v => {
+                const el = document.getElementById(v);
+                if (el) el.classList.add('hidden');
+            });
+
+            // Reset all nav styles
+            navs.forEach(n => {
+                const el = document.getElementById(n);
+                if (el) {
+                    el.classList.remove('text-[#1a73e8]');
+                    el.classList.add('text-gray-600');
+                }
+            });
+
+            // Show selected view
+            const selectedView = document.getElementById(tab + 'View');
+            if (selectedView) selectedView.classList.remove('hidden');
+            
+            // Highlight selected nav
+            const selectedNav = document.getElementById('nav-' + tab);
+            if (selectedNav) {
+                selectedNav.classList.remove('text-gray-600');
+                selectedNav.classList.add('text-[#1a73e8]');
             }
         }
 
         function copyEmail() {
-            const emailText = document.getElementById('emailLink').innerText;
+            const emailText = "chestnutboarding@gmail.com";
             const textArea = document.createElement("textarea");
             textArea.value = emailText;
             document.body.appendChild(textArea);
@@ -274,7 +462,7 @@
         }
 
         function copyPhone() {
-            const phoneText = document.getElementById('phoneLink').innerText;
+            const phoneText = "719-641-8340";
             const textArea = document.createElement("textarea");
             textArea.value = phoneText;
             document.body.appendChild(textArea);
@@ -288,6 +476,39 @@
                 console.error('Failed to copy', err);
             }
             document.body.removeChild(textArea);
+        }
+
+        function handleSmartPhoneClick(e, phoneNum, el) {
+            // Check if the user is likely on a mobile/touch device
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            
+            if (!isMobile) {
+                e.preventDefault(); // Prevent desktop browser from trying to open a call app
+                
+                const textArea = document.createElement("textarea");
+                textArea.value = phoneNum;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    
+                    // Find and show the specific tooltip for this element
+                    const tooltip = el.querySelector('.phone-tooltip');
+                    if (tooltip) {
+                        tooltip.classList.remove('hidden');
+                        // Small delay to allow display block to apply before fading in
+                        setTimeout(() => tooltip.classList.remove('opacity-0'), 10);
+                        
+                        setTimeout(() => {
+                            tooltip.classList.add('opacity-0');
+                            setTimeout(() => tooltip.classList.add('hidden'), 300);
+                        }, 2000);
+                    }
+                } catch (err) {
+                    console.error('Failed to copy', err);
+                }
+                document.body.removeChild(textArea);
+            }
         }
     </script>
 </body>
