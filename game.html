@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Squirrel Runner - Ink Wash</title>
+    <!-- Load Tone.js for Sound Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #e8e6df; /* Raw paper background */
+            font-family: 'Space Mono', monospace;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            filter: contrast(1.1) brightness(0.95);
+        }
+        #uiLayer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        #areaBanner {
+            position: absolute;
+            top: 20%;
+            width: 100%;
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(28px, 6vh, 56px);
+            font-style: normal;
+            font-weight: 700;
+            color: #e8e6df;
+            background: rgba(15, 15, 15, 0.85);
+            padding: 15px 0;
+            border-top: 2px solid #333;
+            border-bottom: 2px solid #333;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            letter-spacing: 4px;
+            z-index: 20;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .screen {
+            background: #e8e6df;
+            padding: clamp(20px, 3vh, 40px) clamp(30px, 5vw, 60px);
+            border: 3px solid #111;
+            box-shadow: 12px 12px 0px rgba(0,0,0,0.85);
+            text-align: center;
+            pointer-events: auto;
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-width: 90%;
+            transform: scale(1);
+            position: relative;
+        }
+        /* Sketchy outline effect for UI */
+        .screen::before {
+            content: '';
+            position: absolute;
+            top: -5px; left: -5px; right: -5px; bottom: -5px;
+            border: 1px solid rgba(0,0,0,0.5);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.95) translateY(20px);
+            display: none;
+        }
+        .screen.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1) translateY(0);
+            display: block;
+        }
+        h1 {
+            margin: 0 0 15px 0;
+            color: #111;
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(28px, 6vh, 48px);
+            font-style: normal;
+            font-weight: 700;
+            border-bottom: 2px solid #111;
+            padding-bottom: 10px;
+        }
+        p {
+            margin: 0 0 25px 0;
+            color: #222;
+            font-size: clamp(14px, 2.5vh, 18px);
+            line-height: 1.6;
+        }
+        .highlight {
+            font-weight: bold;
+            background: rgba(0,0,0,0.1);
+            padding: 0 4px;
+        }
+        .highlight-danger {
+            color: #e8e6df;
+            background: #111;
+            font-weight: bold;
+            padding: 0 4px;
+        }
+        button {
+            background: #111;
+            color: #e8e6df;
+            border: 2px solid #111;
+            padding: clamp(14px, 3vh, 18px) clamp(30px, 6vw, 50px);
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(18px, 4vh, 24px);
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.3);
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+        }
+        button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
+            background: #222;
+        }
+        button:active {
+            transform: translate(4px, 4px);
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
+        }
+        
+        #hud {
+            position: absolute;
+            top: clamp(15px, 3vh, 25px);
+            left: clamp(15px, 3vw, 25px);
+            display: flex;
+            gap: 15px;
+            pointer-events: none;
+            display: none;
+            width: calc(100% - 30px);
+            justify-content: space-between;
+            z-index: 5;
+        }
+        .stat-group {
+            display: flex;
+            gap: 10px;
+        }
+        .stat-box {
+            background: #e8e6df;
+            padding: 8px 18px;
+            border: 2px solid #111;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.8);
+            transition: transform 0.1s ease;
+        }
+        .stat-text {
+            font-size: clamp(16px, 3vh, 20px);
+            font-weight: 700;
+            color: #111;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .stat-icon {
+            font-size: 1.1em;
+            filter: grayscale(1) contrast(2);
+        }
+
+        /* Header Mode / Ultra-thin aspect ratio adjustments */
+        @media (max-height: 400px) {
+            .screen {
+                padding: 10px 20px;
+                box-shadow: 6px 6px 0px rgba(0,0,0,0.85);
+            }
+            h1 {
+                font-size: clamp(18px, 8vh, 24px);
+                margin: 0 0 8px 0;
+                padding-bottom: 5px;
+            }
+            #gameOverScreen p {
+                font-size: clamp(12px, 5vh, 16px) !important;
+                margin: 0 0 8px 0 !important;
+                line-height: 1.2;
+            }
+            button {
+                padding: 8px 24px;
+                font-size: 14px;
+                box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+            }
+            #areaBanner {
+                font-size: clamp(18px, 12vh, 32px);
+                padding: 5px 0;
+            }
+            #hud {
+                top: 5px;
+                left: 10px;
+                width: calc(100% - 20px);
+            }
+            .stat-box {
+                padding: 4px 10px;
+                box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
+            }
+            .stat-text {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    
+    <div id="hud">
+        <div class="stat-group">
+            <div class="stat-box" id="scoreBox">
+                <p class="stat-text"><span class="stat-icon">🌰</span> <span id="scoreText">0</span></p>
+            </div>
+            <div class="stat-box">
+                <p class="stat-text"><span class="stat-icon">🏃</span> <span id="distanceText">0m</span></p>
+            </div>
+        </div>
+        <div class="stat-group">
+            <div class="stat-box">
+                <p class="stat-text"><span id="levelText">Lvl 1</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="uiLayer">
+        <div id="areaBanner">Enemy Ambush</div>
+
+        <div id="startScreen" class="screen visible">
+            <h1>Squirrel Runner</h1>
+            <button id="startBtn">Begin</button>
+        </div>
+
+        <div id="gameOverScreen" class="screen hidden">
+            <h1>Obliterated.</h1>
+            <p id="finalScoreText" style="font-size: 1.2em; font-weight: bold; color: #111; margin-bottom: 10px;">Distance: 0m<br>Acorns: 0</p>
+            <p id="bestScoreText" style="font-size: 1em; color: #555;">Best: 0</p>
+            <button id="restartBtn">Retry</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const hud = document.getElementById('hud');
+        const scoreText = document.getElementById('scoreText');
+        const distanceText = document.getElementById('distanceText');
+        const levelText = document.getElementById('levelText');
+        const scoreBox = document.getElementById('scoreBox');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const finalScoreText = document.getElementById('finalScoreText');
+        const bestScoreText = document.getElementById('bestScoreText');
+        const startBtn = document.getElementById('startBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const areaBanner = document.getElementById('areaBanner');
+
+        let gameState = 'START'; 
+        let animationId;
+        let score = 0;
+        let distance = 0;
+        let bestScore = localStorage.getItem('squirrelBestScoreV4') || 0;
+        let gameSpeed = 5;
+        let speedMultiplier = 1;
+
+        // Area & Progression System
+        let areaType = 'PLATFORMING'; 
+        let distanceInCurrentArea = 0;
+        let areaLevel = 1;
+        const AREA_DURATION = 60; 
+
+        // Tone.js audio objects
+        let sfx = {};
+
+        // Dynamic Configuration Metrics
+        let metrics = {
+            gravity: 0.6,
+            jumpForce: -14,
+            squirrelSize: 40,
+            groundY: 500,
+            baseSpeed: 6.0,
+            nutSize: 25,
+            maxJumps: 2
+        };
+
+        // Player Entity
+        const squirrel = {
+            x: 100, y: 0, width: 40, height: 40,
+            vy: 0, jumps: 0, grounded: false, rotation: 0,
+            trail: [], scaleX: 1, scaleY: 1, coyoteTimer: 0 
+        };
+
+        let platforms = [];
+        let interactables = []; 
+        let mountainsBg = []; 
+        let inkClouds = [];
+        let particles = [];
+
+        // Procedural Textures
+        let noiseCanvas, noiseCtx, hatchPattern;
+
+        function initTextures() {
+            // Paper Noise
+            noiseCanvas = document.createElement('canvas');
+            noiseCanvas.width = Math.max(1, window.innerWidth);
+            noiseCanvas.height = Math.max(1, window.innerHeight);
+            noiseCtx = noiseCanvas.getContext('2d');
+            let imgData = noiseCtx.createImageData(noiseCanvas.width, noiseCanvas.height);
+            for(let i=0; i<imgData.data.length; i+=4) {
+                let val = Math.random() * 255;
+                imgData.data[i] = val; imgData.data[i+1] = val; imgData.data[i+2] = val;
+                imgData.data[i+3] = 12; // Very subtle noise
+            }
+            noiseCtx.putImageData(imgData, 0, 0);
+
+            // Cross-hatch pattern
+            const hatch = document.createElement('canvas');
+            hatch.width = 16; hatch.height = 16;
+            const hCtx = hatch.getContext('2d');
+            hCtx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
+            hCtx.lineWidth = 0.5;
+            hCtx.beginPath();
+            hCtx.moveTo(0, 0); hCtx.lineTo(16, 16);
+            hCtx.moveTo(16, 0); hCtx.lineTo(0, 16);
+            hCtx.stroke();
+            hatchPattern = ctx.createPattern(hatch, 'repeat');
+        }
+
+        function initAudio() {
+            if (sfx.jump) return; 
+            Tone.Destination.volume.value = -6;
+
+            // Gritty, slightly distorted synth sounds
+            const dist = new Tone.Distortion(0.2).toDestination();
+
+            sfx.jump = new Tone.Synth({
+                oscillator: { type: "sawtooth" },
+                envelope: { attack: 0.01, decay: 0.2, sustain: 0, release: 0.1 }
+            }).connect(dist);
+
+            sfx.collect = new Tone.PolySynth(Tone.Synth, {
+                oscillator: { type: "square" },
+                envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
+            }).connect(dist);
+            
+            sfx.goldenCollect = new Tone.PolySynth(Tone.Synth, {
+                oscillator: { type: "sine" },
+                envelope: { attack: 0.02, decay: 0.4, sustain: 0, release: 0.4 }
+            }).toDestination(); // Clean, ethereal sound for contrast
+
+            sfx.land = new Tone.MembraneSynth({
+                pitchDecay: 0.05, octaves: 4, 
+                envelope: { attack: 0.001, decay: 0.2, sustain: 0, release: 0.1 }
+            }).toDestination();
+
+            sfx.die = new Tone.MetalSynth({
+                frequency: 200, envelope: { attack: 0.01, decay: 1.0, release: 0.2 },
+                harmonicity: 5.1, modulationIndex: 32, resonance: 4000, octaves: 1.5
+            }).connect(dist);
+        }
+
+        function calculateMetrics() {
+            const h = canvas.height;
+            const w = canvas.width;
+            metrics.groundY = h * 0.85;
+            
+            // Allow the squirrel to shrink dynamically for extreme header heights
+            metrics.squirrelSize = Math.min(50, Math.max(16, h * 0.12)); 
+            squirrel.width = metrics.squirrelSize;
+            squirrel.height = metrics.squirrelSize;
+            
+            // Prevent gravity from floating too much on short screens, increased for snappier jumps
+            metrics.gravity = Math.max(0.25, h * 0.0025); 
+            
+            // Constrain jump height to stay inside the viewport on thin headers
+            const maxJumpHeight = metrics.groundY * 0.75;
+            const desiredJumpHeight = Math.min(metrics.squirrelSize * 3.5, maxJumpHeight);
+            metrics.jumpForce = -Math.sqrt(desiredJumpHeight * 2 * metrics.gravity);
+            
+            // Adjust base speed to account for wider layouts vs squished heights
+            metrics.baseSpeed = Math.max(4.0, w * 0.005);
+            if (gameState === 'START') gameSpeed = metrics.baseSpeed;
+            metrics.nutSize = metrics.squirrelSize * 0.75;
+            squirrel.x = Math.max(40, w * 0.10);
+        }
+
+        function resizeCanvas() {
+            canvas.width = Math.max(1, window.innerWidth);
+            canvas.height = Math.max(1, window.innerHeight);
+            calculateMetrics();
+            initTextures(); 
+            if (gameState === 'START' || squirrel.grounded) {
+                squirrel.y = metrics.groundY - squirrel.height;
+            }
+            if (gameState === 'START') drawInitialFrame();
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function createMountain(x, depth) {
+            const hFactor = depth === 1 ? 0.3 : 0.5;
+            const wFactor = depth === 1 ? 0.3 : 0.5;
+            return {
+                x: x, y: metrics.groundY, depth: depth,
+                base: Math.random() * (canvas.width * wFactor) + (canvas.width * 0.2),
+                height: Math.random() * (canvas.height * hFactor) + (canvas.height * 0.1),
+                points: Array.from({length: 6}, () => Math.random() * 0.3 + 0.85) // Random jaggedness
+            };
+        }
+
+        function createInkCloud(x) {
+            return {
+                x: x, y: Math.random() * (canvas.height * 0.6),
+                size: Math.random() * (canvas.height * 0.15) + (canvas.height * 0.05),
+                speed: Math.random() * 0.2 + 0.05,
+                opacity: Math.random() * 0.3 + 0.1
+            };
+        }
+
+        function spawnInkSplatters(x, y, count, type = 'dark') {
+            for(let i=0; i<count; i++) {
+                particles.push({
+                    x: x, y: y,
+                    vx: (Math.random() - 0.5) * 12,
+                    vy: (Math.random() - 0.5) * 12 - 4,
+                    size: Math.random() * 8 + 2,
+                    type: type, // 'dark' or 'gold'
+                    life: 1.0,
+                    decay: Math.random() * 0.04 + 0.01
+                });
+            }
+        }
+
+        function showBanner(text) {
+            areaBanner.innerText = text;
+            areaBanner.style.opacity = 1;
+            setTimeout(() => areaBanner.style.opacity = 0, 2000);
+        }
+
+        function spawnPlatform(x, currentAreaType) {
+            const minWidth = canvas.width * 0.2;
+            const maxWidth = currentAreaType === 'FLAT_RUN' ? canvas.width * 0.8 : canvas.width * 0.45;
+            const width = Math.random() * (maxWidth - minWidth) + minWidth;
+            
+            let targetY = metrics.groundY;
+            if (currentAreaType === 'PLATFORMING') {
+                let yOffset = 0;
+                if (Math.random() > 0.5 && platforms.length > 0) {
+                    const maxElevationDiff = Math.abs(metrics.jumpForce) * 2.5;
+                    yOffset = (Math.random() * maxElevationDiff * 2) - maxElevationDiff;
+                }
+                targetY = metrics.groundY - yOffset;
+                targetY = Math.max(canvas.height * 0.35, Math.min(targetY, metrics.groundY));
+            }
+
+            // Generate sketchy top edge points
+            let topPoints = [];
+            let segments = Math.ceil(width / 20);
+            for(let i=0; i<=segments; i++) {
+                topPoints.push(targetY + (Math.random() * 6 - 3));
+            }
+
+            platforms.push({ x, y: targetY, width, height: canvas.height - targetY, topPoints });
+
+            const availableSpace = width - 40;
+            if (availableSpace > 100) {
+                if (currentAreaType === 'FLAT_RUN') {
+                    if (Math.random() > 0.35) {
+                        interactables.push({
+                            type: 'enemy', x: x + width, y: targetY - metrics.nutSize * 1.5,
+                            size: metrics.nutSize * 1.5, collected: false, vx: 2 + (areaLevel * 0.6)
+                        });
+                    } else if (Math.random() > 0.6) {
+                        interactables.push({ 
+                            type: 'nut', x: x + width/2, y: targetY - squirrel.height * 2.5, 
+                            size: metrics.nutSize, collected: false, offset: Math.random() * Math.PI*2 
+                        });
+                    }
+                } else {
+                    const spawnRoll = Math.random();
+                    if (spawnRoll > 0.8 && distance > 50) {
+                        interactables.push({
+                            type: 'hazard', x: x + width/2, y: targetY - metrics.nutSize * 1.2,
+                            size: metrics.nutSize * 1.2, collected: false,
+                            rot: (Math.random()-0.5) * 0.5
+                        });
+                    } else if (spawnRoll > 0.2) {
+                        const isArc = Math.random() > 0.5;
+                        const isGolden = Math.random() > 0.92; 
+                        const nutCount = isArc ? 3 : (Math.random() > 0.5 ? 2 : 1);
+                        const startX = x + width * 0.2;
+                        const spacing = (width * 0.6) / (nutCount || 1);
+
+                        for (let i = 0; i < nutCount; i++) {
+                            let nutY = targetY - squirrel.height * 1.3;
+                            if (isArc) nutY -= Math.sin((i / (nutCount - 1)) * Math.PI) * squirrel.height * 1.6;
+                            
+                            interactables.push({ 
+                                type: isGolden && i===1 ? 'golden' : 'nut',
+                                x: startX + (i * spacing), y: nutY, size: metrics.nutSize, 
+                                collected: false, offset: Math.random() * Math.PI * 2
+                            });
+                        }
+                    }
+                }
+            }
+            return { rightEdge: x + width };
+        }
+
+        function initEnvironment() {
+            platforms = []; interactables = []; mountainsBg = []; inkClouds = []; particles = [];
+
+            // Generate initial flat area
+            let topPoints = [];
+            let width = canvas.width * 1.2;
+            for(let i=0; i<=Math.ceil(width / 20); i++) topPoints.push(metrics.groundY + (Math.random() * 6 - 3));
+            platforms.push({ x: 0, y: metrics.groundY, width: width, height: canvas.height - metrics.groundY, topPoints });
+            
+            for (let i = 0; i < 4; i++) {
+                mountainsBg.push(createMountain(i * (canvas.width * 0.35), 2)); // Far
+                mountainsBg.push(createMountain(i * (canvas.width * 0.25) + 50, 1)); // Near
+                inkClouds.push(createInkCloud(i * (canvas.width * 0.3)));
+            }
+        }
+
+        function updateEnvironment() {
+            const currentSpeed = gameSpeed * speedMultiplier;
+
+            let lastPlatformEdge = 0;
+            for (let i = platforms.length - 1; i >= 0; i--) {
+                platforms[i].x -= currentSpeed;
+                if (platforms[i].x + platforms[i].width > lastPlatformEdge) lastPlatformEdge = platforms[i].x + platforms[i].width;
+                if (platforms[i].x + platforms[i].width < 0) platforms.splice(i, 1);
+            }
+
+            if (lastPlatformEdge < canvas.width + (canvas.width * 0.5)) {
+                // Calculate guaranteed safe gaps based on current speed and air time
+                const airTime = Math.abs(metrics.jumpForce * 2) / metrics.gravity;
+                const maxJumpDist = currentSpeed * airTime;
+                const safeGap = Math.min(maxJumpDist * 0.55, squirrel.width * 5.5);
+
+                let gap = areaType === 'PLATFORMING' ? 
+                          Math.random() * safeGap + (squirrel.width * 1.2) : 
+                          -20; // Slight overlap for ambush
+                spawnPlatform(lastPlatformEdge + gap, areaType);
+            }
+
+            for (let i = interactables.length - 1; i >= 0; i--) {
+                let item = interactables[i];
+                item.x -= item.type === 'enemy' ? (currentSpeed + item.vx) : currentSpeed;
+                if (item.x + item.size < 0 || item.collected) interactables.splice(i, 1);
+            }
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.x += p.vx - currentSpeed * 0.6; 
+                p.y += p.vy;
+                p.vy += metrics.gravity * 0.8;
+                p.life -= p.decay;
+                if (p.life <= 0) particles.splice(i, 1);
+            }
+
+            for (let i = mountainsBg.length - 1; i >= 0; i--) {
+                mountainsBg[i].x -= currentSpeed * (mountainsBg[i].depth === 1 ? 0.3 : 0.1);
+                if (mountainsBg[i].x + mountainsBg[i].base < 0) mountainsBg.splice(i, 1);
+            }
+            if (mountainsBg.length < 8) {
+                let isNear = Math.random() > 0.5;
+                mountainsBg.push(createMountain(canvas.width + Math.random() * 200, isNear ? 1 : 2));
+            }
+            
+            for (let i = inkClouds.length - 1; i >= 0; i--) {
+                inkClouds[i].x -= inkClouds[i].speed + (currentSpeed * 0.05);
+                if (inkClouds[i].x + inkClouds[i].size * 2 < 0) inkClouds.splice(i, 1);
+            }
+            if (inkClouds.length < 5) inkClouds.push(createInkCloud(canvas.width + Math.random()*200));
+        }
+
+        function triggerJump() {
+            if (gameState !== 'PLAYING') return;
+            if (squirrel.grounded || squirrel.coyoteTimer > 0 || squirrel.jumps < metrics.maxJumps) {
+                if (!squirrel.grounded && squirrel.coyoteTimer > 0 && squirrel.jumps === 0) squirrel.jumps = 1;
+                else squirrel.jumps++;
+
+                squirrel.vy = metrics.jumpForce;
+                squirrel.grounded = false; squirrel.coyoteTimer = 0; 
+                squirrel.scaleX = 0.6; squirrel.scaleY = 1.4;
+                
+                if(sfx.jump) sfx.jump.triggerAttackRelease(squirrel.jumps === 2 ? "E4" : "C4", "16n");
+                spawnInkSplatters(squirrel.x + squirrel.width/2, squirrel.y + squirrel.height, 10, 'dark');
+            }
+        }
+
+        function releaseJump() {
+            // Disabled the velocity damping so every tap guarantees a full height jump
+        }
+
+        function checkCollisions() {
+            let wasGrounded = squirrel.grounded;
+            squirrel.grounded = false;
+            const buffer = 15; 
+
+            for (let p of platforms) {
+                if (squirrel.x + buffer < p.x + p.width && squirrel.x + squirrel.width - buffer > p.x &&
+                    squirrel.y + squirrel.height <= p.y + squirrel.height * 0.6 && 
+                    squirrel.y + squirrel.height + squirrel.vy >= p.y) 
+                {
+                    squirrel.grounded = true;
+                    squirrel.y = p.y - squirrel.height;
+                    squirrel.vy = 0; squirrel.jumps = 0; squirrel.rotation = 0;
+                    
+                    if (!wasGrounded) {
+                        squirrel.scaleX = 1.4; squirrel.scaleY = 0.6;
+                        if(sfx.land) sfx.land.triggerAttackRelease("C1", "16n", Tone.now(), 0.8);
+                        spawnInkSplatters(squirrel.x + squirrel.width/2, squirrel.y + squirrel.height, 8, 'dark');
+                    }
+                    break;
+                }
+                else if (squirrel.x + squirrel.width > p.x && squirrel.x < p.x + p.width && squirrel.y + squirrel.height > p.y + buffer) {
+                     squirrel.x -= gameSpeed * speedMultiplier; 
+                }
+            }
+
+            if (wasGrounded && !squirrel.grounded && squirrel.vy >= 0) squirrel.coyoteTimer = 8; 
+            else if (!squirrel.grounded) squirrel.coyoteTimer--;
+
+            if (squirrel.x + squirrel.width < 0 || squirrel.y > canvas.height + squirrel.height) triggerGameOver();
+
+            const shrink = 10; 
+            for (let item of interactables) {
+                if (!item.collected && squirrel.x + shrink < item.x + item.size && squirrel.x + squirrel.width - shrink > item.x &&
+                    squirrel.y + shrink < item.y + item.size && squirrel.y + squirrel.height - shrink > item.y) 
+                {
+                    if (item.type === 'hazard' || item.type === 'enemy') {
+                        triggerGameOver(); return; 
+                    } else {
+                        item.collected = true;
+                        if (item.type === 'golden') {
+                            score += 5;
+                            spawnInkSplatters(item.x + item.size/2, item.y + item.size/2, 20, 'gold');
+                            if(sfx.goldenCollect) sfx.goldenCollect.triggerAttackRelease(["C5", "E5", "G5"], "8n");
+                        } else {
+                            score++;
+                            spawnInkSplatters(item.x + item.size/2, item.y + item.size/2, 6, 'dark');
+                            if(sfx.collect) sfx.collect.triggerAttackRelease("E4", "32n");
+                        }
+                        scoreText.innerText = score;
+                        scoreBox.style.transform = 'scale(1.1)';
+                        setTimeout(() => scoreBox.style.transform = 'scale(1)', 100);
+                    }
+                }
+            }
+        }
+
+        function drawBackground() {
+            // Paper base
+            ctx.fillStyle = '#e8e6df';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw noise/grain overlay (multiply mode)
+            ctx.globalCompositeOperation = 'multiply';
+            ctx.drawImage(noiseCanvas, 0, 0);
+            ctx.globalCompositeOperation = 'source-over';
+
+            // Ethereal Ink Clouds
+            ctx.save();
+            ctx.shadowColor = 'rgba(10, 10, 10, 0.4)';
+            for (let c of inkClouds) {
+                ctx.fillStyle = `rgba(30, 30, 30, ${c.opacity})`;
+                ctx.shadowBlur = c.size * 0.8;
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+                ctx.arc(c.x + c.size * 1.2, c.y + c.size*0.2, c.size * 0.6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.restore();
+
+            // Mountains (Ink Wash + Pencil outline)
+            for (let m of mountainsBg.sort((a,b) => b.depth - a.depth)) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(m.x - m.base / 2, m.y);
+                
+                // Jagged peak drawing
+                let pIndex = 0;
+                for(let ix = m.x - m.base/2; ix <= m.x + m.base/2; ix += m.base/6) {
+                    let hMult = ix < m.x ? ((ix - (m.x - m.base/2)) / (m.base/2)) : (1 - (ix - m.x) / (m.base/2));
+                    let pHeight = m.y - (m.height * hMult * m.points[pIndex%m.points.length]);
+                    ctx.lineTo(ix, pHeight);
+                    pIndex++;
+                }
+                ctx.lineTo(m.x + m.base / 2, m.y);
+                
+                // Ink Wash Fill
+                let grad = ctx.createLinearGradient(0, m.y - m.height, 0, m.y);
+                let alpha = m.depth === 1 ? 0.2 : 0.08;
+                grad.addColorStop(0, `rgba(20,20,20,${alpha})`);
+                grad.addColorStop(1, `rgba(20,20,20,0)`);
+                ctx.fillStyle = grad;
+                ctx.fill();
+                
+                // Pencil outline
+                ctx.strokeStyle = `rgba(10,10,10,${m.depth===1 ? 0.6 : 0.3})`;
+                ctx.lineWidth = m.depth === 1 ? 2 : 1;
+                ctx.stroke();
+
+                // Inner cross-hatching
+                ctx.clip();
+                ctx.globalAlpha = m.depth === 1 ? 0.3 : 0.1;
+                ctx.fillStyle = hatchPattern;
+                ctx.fillRect(m.x - m.base/2, m.y - m.height, m.base, m.height);
+                ctx.restore();
+            }
+        }
+
+        function drawPlatforms() {
+            for (let p of platforms) {
+                // Gradient ink wash body
+                let grad = ctx.createLinearGradient(0, p.y, 0, canvas.height);
+                grad.addColorStop(0, 'rgba(40, 40, 40, 0.9)');
+                grad.addColorStop(0.3, 'rgba(15, 15, 15, 1)');
+                grad.addColorStop(1, 'rgba(5, 5, 5, 1)');
+                
+                ctx.fillStyle = grad;
+                ctx.fillRect(p.x, p.y, p.width, p.height);
+
+                // Overlay Hatching
+                ctx.save();
+                ctx.globalCompositeOperation = 'overlay';
+                ctx.fillStyle = hatchPattern;
+                ctx.fillRect(p.x, p.y, p.width, p.height);
+                ctx.restore();
+
+                // Jagged sketchy top edge
+                ctx.strokeStyle = '#050505';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.topPoints[0]);
+                for(let i=1; i<p.topPoints.length; i++) {
+                    let segX = p.x + (i * (p.width / (p.topPoints.length-1)));
+                    ctx.lineTo(segX, p.topPoints[i]);
+                }
+                ctx.stroke();
+
+                // Secondary thin scribbled line
+                ctx.strokeStyle = 'rgba(20,20,20,0.6)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.topPoints[0] + 2);
+                for(let i=1; i<p.topPoints.length; i++) {
+                    let segX = p.x + (i * (p.width / (p.topPoints.length-1)));
+                    ctx.lineTo(segX, p.topPoints[i] + (Math.random()*4-2));
+                }
+                ctx.stroke();
+            }
+        }
+
+        function drawInteractables() {
+            ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            const time = Date.now();
+            
+            for (let item of interactables) {
+                if (!item.collected) {
+                    ctx.save();
+                    
+                    if (item.type === 'hazard') {
+                        // Strictly grayscale, but bright enough to see the details
+                        ctx.filter = 'grayscale(1) contrast(1.2) brightness(0.7)';
+                        ctx.font = `${item.size}px Arial`;
+                        ctx.translate(item.x + item.size / 2, item.y + item.size / 2);
+                        ctx.rotate(item.rot);
+                        ctx.fillText("🌵", 0, 0);
+                        
+                        // Sketchy overlay circle
+                        ctx.strokeStyle = 'rgba(0,0,0,0.8)'; ctx.lineWidth=2;
+                        ctx.beginPath(); ctx.arc(0,0,item.size*0.4, 0, Math.PI*2); ctx.stroke();
+                        
+                    } else if (item.type === 'enemy') {
+                        const enemyBob = Math.sin((time / 100) + item.x) * (item.size * 0.1);
+                        // Strictly grayscale, visible fox details
+                        ctx.filter = 'grayscale(1) contrast(1.2) brightness(0.7) drop-shadow(4px 4px 0px rgba(0,0,0,0.4))';
+                        ctx.font = `${item.size}px Arial`;
+                        ctx.translate(item.x + item.size / 2, item.y + item.size / 2 + enemyBob);
+                        ctx.scale(1, 1 + Math.sin(time / 50) * 0.05); 
+                        ctx.fillText("🦊", 0, 0);
+
+                        // Erratic sketch lines over enemy
+                        ctx.strokeStyle = 'rgba(0,0,0,0.9)'; ctx.lineWidth=1.5;
+                        ctx.beginPath();
+                        for(let k=0; k<5; k++) {
+                            ctx.moveTo((Math.random()-0.5)*item.size, (Math.random()-0.5)*item.size);
+                            ctx.lineTo((Math.random()-0.5)*item.size, (Math.random()-0.5)*item.size);
+                        }
+                        ctx.stroke();
+
+                    } else {
+                        const bobbing = Math.sin((time / 150) + item.offset) * (item.size * 0.15);
+                        ctx.font = `${item.size}px Arial`;
+                        
+                        if (item.type === 'golden') {
+                            // Bright grayscale for the golden item to stand out
+                            ctx.filter = 'grayscale(1) contrast(1.2) brightness(1.5) drop-shadow(0 0 10px rgba(200,200,200,0.6))';
+                            ctx.fillText("✨", item.x + item.size / 2, item.y + item.size / 2 + bobbing);
+                        } else {
+                            // Fully grayscale dark nut, clearly visible
+                            ctx.filter = 'grayscale(1) contrast(1.2) brightness(0.7)';
+                            ctx.fillText("🌰", item.x + item.size / 2, item.y + item.size / 2 + bobbing);
+                        }
+                    }
+                    ctx.restore();
+                }
+            }
+        }
+
+        function drawParticles() {
+            for(let p of particles) {
+                ctx.globalAlpha = Math.max(0, p.life);
+                // Fragmented ink blobs
+                ctx.fillStyle = p.type === 'gold' ? '#B38A36' : '#111111';
+                ctx.beginPath();
+                
+                // Draw irregular polygon instead of a circle for "dispersion effect"
+                ctx.moveTo(p.x, p.y - p.size);
+                ctx.lineTo(p.x + p.size, p.y + p.size/2);
+                ctx.lineTo(p.x - p.size, p.y + p.size/2);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1.0;
+        }
+
+        function drawSquirrel() {
+            squirrel.scaleX += (1 - squirrel.scaleX) * 0.15;
+            squirrel.scaleY += (1 - squirrel.scaleY) * 0.15;
+
+            if (!squirrel.grounded && Math.abs(squirrel.vy) > 2) {
+                squirrel.trail.push({
+                    x: squirrel.x, y: squirrel.y, sx: squirrel.scaleX, sy: squirrel.scaleY, rot: squirrel.rotation
+                });
+            } else squirrel.trail.shift(); 
+            if (squirrel.trail.length > 5) squirrel.trail.shift();
+
+            ctx.save();
+            ctx.textAlign = "center"; ctx.textBaseline = "middle";
+            
+            // Dynamic Sweeping Strokes (Trail)
+            for (let i=0; i<squirrel.trail.length; i++) {
+                let t = squirrel.trail[i];
+                ctx.globalAlpha = (i / squirrel.trail.length) * 0.3;
+                ctx.save();
+                ctx.translate(t.x + squirrel.width / 2, t.y + squirrel.height / 2);
+                ctx.rotate(t.rot);
+                ctx.scale(-1 * t.sx, t.sy); 
+                ctx.filter = 'grayscale(1) brightness(0)'; // pure black trail shadows
+                ctx.font = `${metrics.squirrelSize}px Arial`;
+                ctx.fillText("🐿️", 0, metrics.squirrelSize * 0.1);
+                
+                // Speed lines
+                ctx.strokeStyle = 'rgba(0,0,0,0.8)'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(20, (Math.random()-0.5)*10); ctx.stroke();
+                ctx.restore();
+            }
+            ctx.globalAlpha = 1.0;
+
+            // Main Squirrel (High contrast graphite filter)
+            ctx.translate(squirrel.x + squirrel.width / 2, squirrel.y + squirrel.height / 2);
+            if (!squirrel.grounded) {
+                let targetRot = Math.min(Math.max(squirrel.vy * 0.04, -0.4), 0.6);
+                squirrel.rotation += ((-targetRot) - squirrel.rotation) * 0.2; 
+            } else squirrel.rotation *= 0.8; 
+            
+            ctx.rotate(squirrel.rotation);
+            ctx.scale(-1 * squirrel.scaleX, squirrel.scaleY); 
+            
+            // Heavy styling to make emoji look like a dark, raw sketch
+            ctx.filter = 'grayscale(1) contrast(1.5) sepia(0.3) brightness(0.6)';
+            ctx.font = `${metrics.squirrelSize}px Arial`;
+            ctx.fillText("🐿️", 0, metrics.squirrelSize * 0.1); 
+
+            ctx.restore();
+        }
+
+        function drawVignette() {
+            // Volumetric chiaroscuro shading around edges
+            ctx.save();
+            ctx.globalCompositeOperation = 'multiply';
+            let vig = ctx.createRadialGradient(canvas.width/2, canvas.height/2, canvas.height*0.3, canvas.width/2, canvas.height/2, Math.max(canvas.width, canvas.height)*0.8);
+            vig.addColorStop(0, 'rgba(230, 230, 230, 1)'); 
+            vig.addColorStop(1, 'rgba(40, 40, 40, 1)'); // Dark edges
+            ctx.fillStyle = vig;
+            ctx.fillRect(0,0,canvas.width, canvas.height);
+            ctx.restore();
+        }
+
+        function drawInitialFrame() {
+            drawBackground();
+            
+            // Draw dummy ground for start screen
+            ctx.fillStyle = 'rgba(30,30,30,0.95)';
+            ctx.fillRect(0, metrics.groundY, canvas.width, canvas.height - metrics.groundY);
+            
+            squirrel.x = Math.max(80, canvas.width * 0.15);
+            squirrel.y = metrics.groundY - squirrel.height;
+            drawSquirrel();
+            drawVignette();
+        }
+
+        function update() {
+            if (gameState !== 'PLAYING') return;
+
+            if (!squirrel.grounded) {
+                squirrel.vy += metrics.gravity;
+                // Terminal velocity limit increased so the player falls faster
+                const terminalVelocity = metrics.squirrelSize * 0.8;
+                if (squirrel.vy > terminalVelocity) {
+                    squirrel.vy = terminalVelocity;
+                }
+            }
+            squirrel.y += squirrel.vy;
+
+            const targetX = Math.max(80, canvas.width * 0.15);
+            if (squirrel.x < targetX) squirrel.x += (targetX - squirrel.x) * 0.08 + 0.5; 
+
+            updateEnvironment();
+            checkCollisions();
+
+            const currentSpeed = gameSpeed * speedMultiplier;
+            let distIncrement = currentSpeed / 50;
+            distance += distIncrement;
+            distanceInCurrentArea += distIncrement;
+            distanceText.innerText = `${Math.floor(distance)}m`;
+
+            if (distanceInCurrentArea >= AREA_DURATION) {
+                distanceInCurrentArea = 0;
+                areaLevel++;
+                speedMultiplier += 0.20; 
+                levelText.innerText = `Lvl ${areaLevel}`;
+                
+                if (areaType === 'PLATFORMING') {
+                    areaType = 'FLAT_RUN';
+                    showBanner(`Ambush!`);
+                } else {
+                    areaType = 'PLATFORMING';
+                    showBanner(`Ascend.`);
+                }
+            }
+
+            drawBackground();
+            drawPlatforms();
+            drawInteractables();
+            drawParticles();
+            drawSquirrel();
+            drawVignette();
+
+            animationId = requestAnimationFrame(update);
+        }
+
+        async function startGame() {
+            await Tone.start();
+            initAudio();
+
+            score = 0; distance = 0;
+            areaType = 'PLATFORMING'; distanceInCurrentArea = 0; areaLevel = 1; speedMultiplier = 1;
+            
+            scoreText.innerText = `0`; distanceText.innerText = `0m`; levelText.innerText = `Lvl 1`;
+            calculateMetrics();
+            
+            squirrel.y = metrics.groundY - squirrel.height;
+            squirrel.vy = 0; squirrel.jumps = 0; squirrel.grounded = true;
+            squirrel.rotation = 0; squirrel.trail = []; squirrel.scaleX = 1; squirrel.scaleY = 1;
+
+            initEnvironment();
+
+            startScreen.classList.remove('visible'); startScreen.classList.add('hidden');
+            gameOverScreen.classList.remove('visible'); gameOverScreen.classList.add('hidden');
+            hud.style.display = 'flex';
+
+            gameState = 'PLAYING';
+            cancelAnimationFrame(animationId);
+            update();
+        }
+
+        function triggerGameOver() {
+            gameState = 'GAMEOVER';
+            if(sfx.die) sfx.die.triggerAttackRelease("C1", "2n");
+            
+            // Giant ink explosion on death
+            spawnInkSplatters(squirrel.x + squirrel.width/2, squirrel.y + squirrel.height/2, 50, 'dark');
+            drawParticles();
+
+            let totalScore = Math.floor(distance) + (score * 15);
+            if (totalScore > bestScore) {
+                bestScore = totalScore;
+                localStorage.setItem('squirrelBestScoreV4', bestScore);
+            }
+
+            hud.style.display = 'none';
+            finalScoreText.innerHTML = `Distance: ${Math.floor(distance)}m<br>Acorns: ${score}<br><br><span style="font-family:'Playfair Display',serif; font-style:italic; font-size:1.4em;">Total Score: ${totalScore}</span>`;
+            bestScoreText.innerText = `Best Score: ${bestScore}`;
+            
+            gameOverScreen.classList.remove('hidden'); gameOverScreen.classList.add('visible');
+        }
+
+        function handleInputStart(e) {
+            if ((e.type === 'keydown' && (e.code === 'Space' || e.code === 'ArrowUp')) || e.type === 'touchstart') {
+                if(e.cancelable) e.preventDefault();
+            }
+            if (e.target.tagName === 'BUTTON') return;
+            triggerJump();
+        }
+
+        function handleInputEnd(e) {
+            if (e.target.tagName === 'BUTTON') return;
+            releaseJump();
+        }
+
+        startBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', startGame);
+
+        window.addEventListener('keydown', (e) => { if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') handleInputStart(e); });
+        window.addEventListener('keyup', (e) => { if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') handleInputEnd(e); });
+        canvas.addEventListener('mousedown', handleInputStart);
+        window.addEventListener('mouseup', handleInputEnd);
+        canvas.addEventListener('touchstart', handleInputStart, { passive: false });
+        window.addEventListener('touchend', handleInputEnd);
+
+    </script>
+</body>
+</html>
