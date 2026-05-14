@@ -186,47 +186,53 @@
 
         /* Header Mode / Ultra-thin aspect ratio adjustments */
         @media (max-height: 450px) {
-            .screen {
-                padding: 2vh 4vw;
+            .screen.visible {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 15px;
+                padding: 6px 15px;
                 box-shadow: 4px 4px 0px rgba(0,0,0,0.85);
+                width: auto;
             }
             h1 {
-                font-size: clamp(14px, 10vh, 20px);
-                margin: 0 0 1vh 0;
-                padding-bottom: 1vh;
-                border-bottom: 1px solid #111;
+                font-size: clamp(16px, 12vh, 24px);
+                margin: 0 !important;
+                padding: 0 15px 0 0 !important;
+                border-bottom: none !important;
+                border-right: 2px solid #111 !important;
+                white-space: nowrap;
             }
             #gameOverScreen p {
-                font-size: clamp(10px, 6vh, 14px) !important;
-                margin: 0 0 1vh 0 !important;
-                line-height: 1.1;
+                font-size: clamp(12px, 8vh, 16px) !important;
+                margin: 0 !important;
+                text-align: left;
+                line-height: 1.2;
+            }
+            #bestScoreText {
+                padding-left: 10px;
+                border-left: 1px solid #ccc;
+                white-space: nowrap;
             }
             button {
-                padding: 2vh 4vw;
-                font-size: clamp(12px, 6vh, 16px);
+                padding: 6px 16px;
+                font-size: clamp(12px, 8vh, 16px);
                 box-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+                white-space: nowrap;
+                margin-left: 10px;
             }
             #areaBanner {
                 font-size: clamp(14px, 10vh, 24px);
                 padding: 2px 0;
             }
             #hud {
-                top: 2px;
-                left: 10px;
-                width: calc(100% - 20px);
+                top: 2px; left: 5px; width: calc(100% - 10px); gap: 5px;
             }
-            .stat-box {
-                padding: 2px 8px;
-                box-shadow: 2px 2px 0px rgba(0,0,0,0.8);
-            }
-            .stat-text {
-                font-size: clamp(10px, 5vh, 14px);
-            }
-            
-            /* Target the injected Total Score span to prevent it from overflowing */
-            #finalScoreText span {
-                font-size: 1.1em !important; 
-            }
+            .stat-group { gap: 5px; }
+            .stat-box { padding: 2px 6px; box-shadow: 2px 2px 0px rgba(0,0,0,0.8); }
+            .stat-text { font-size: clamp(10px, 6vh, 14px); gap: 4px; }
+            #finalScoreText span { font-size: 1.1em !important; }
         }
     </style>
 </head>
@@ -1020,8 +1026,8 @@
             }
 
             hud.style.display = 'none';
-            finalScoreText.innerHTML = `Dist: ${Math.floor(distance)}m | Acorns: ${score}<br><span style="font-weight:bold; font-size:1.2em;">Total Score: ${totalScore}</span>`;
-            bestScoreText.innerText = `Best Score: ${bestScore}`;
+            finalScoreText.innerHTML = `<span style="font-weight:bold; font-size:1.1em; display:block;">Total: ${totalScore}</span><span style="font-size:0.9em;">Dist: ${Math.floor(distance)}m | Acorns: ${score}</span>`;
+            bestScoreText.innerText = `Best: ${bestScore}`;
             
             gameOverScreen.classList.remove('hidden'); gameOverScreen.classList.add('visible');
         }
