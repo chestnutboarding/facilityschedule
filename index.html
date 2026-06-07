@@ -184,15 +184,12 @@
                         Boarding Agreement
                     </h3>
                     <p class="text-gray-600 text-sm leading-relaxed mb-3">
-                        Please feel free to view our boarding agreement or contingency plan at any time.
+                        Please feel free to view our boarding agreement at any time.
                     </p>
                     <div class="flex flex-col items-start gap-2">
-                        <a href="https://docs.google.com/document/d/1Nat8vBiutp2nUZLU_r6Nx1ij0sVBVnhCUZihsFwMVb0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-medium text-[#1a73e8] hover:underline">
+                        <button onclick="openAgreementModal()" class="inline-flex items-center text-sm font-medium text-[#1a73e8] hover:underline cursor-pointer">
                             View Agreement
-                        </a>
-                        <a href="https://docs.google.com/document/d/1KikvEDPsf79esrLueXGB7U7wN4RkcJ42F6cXfNPkHsg/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-medium text-[#1a73e8] hover:underline">
-                            View Contingency Plan
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -305,6 +302,26 @@
         <img id="modalImage" src="" alt="Full size" class="max-h-[85vh] max-w-full object-contain rounded shadow-2xl pointer-events-auto">
     </div>
 
+    <!-- Agreement Modal -->
+    <div id="agreementModal" class="fixed inset-0 z-[70] hidden bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full flex items-start justify-center backdrop-blur-sm p-4 sm:p-8">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl relative flex flex-col max-h-full">
+            <div class="flex justify-between items-center p-4 sm:p-6 border-b border-gray-200 sticky top-0 bg-white rounded-t-xl z-10">
+                <h2 class="text-xl font-medium text-gray-900">Boarding Agreement</h2>
+                <button onclick="closeAgreementModal()" class="text-gray-400 hover:text-gray-700 transition focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="overflow-y-auto p-4 sm:p-6 bg-gray-50 flex-grow rounded-b-xl space-y-4 sm:space-y-6">
+                <img src="https://i.imgur.com/YjD8bgy.jpeg" alt="Agreement Page 1" class="w-full h-auto rounded shadow-sm border border-gray-200">
+                <img src="https://i.imgur.com/X15cOQz.jpeg" alt="Agreement Page 2" class="w-full h-auto rounded shadow-sm border border-gray-200">
+                <img src="https://i.imgur.com/QjrD4Sa.jpeg" alt="Agreement Page 3" class="w-full h-auto rounded shadow-sm border border-gray-200">
+                <img src="https://i.imgur.com/bxmW8mv.jpeg" alt="Agreement Page 4" class="w-full h-auto rounded shadow-sm border border-gray-200">
+            </div>
+        </div>
+    </div>
+
     <script>
         function openModal() { document.getElementById('contactModal').classList.remove('hidden'); }
         function closeModal() { document.getElementById('contactModal').classList.add('hidden'); }
@@ -318,6 +335,16 @@
         
         function closeImageModal() {
             document.getElementById('imageModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function openAgreementModal() {
+            document.getElementById('agreementModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAgreementModal() {
+            document.getElementById('agreementModal').classList.add('hidden');
             document.body.style.overflow = 'auto';
         }
 
@@ -362,6 +389,7 @@
         window.onclick = function(event) {
             if (event.target === document.getElementById('contactModal')) closeModal();
             if (event.target === document.getElementById('imageModal')) closeImageModal();
+            if (event.target === document.getElementById('agreementModal')) closeAgreementModal();
         }
     </script>
 </body>
