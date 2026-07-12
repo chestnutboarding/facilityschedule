@@ -51,13 +51,25 @@
                     </a>
                 </div>
                 <div class="flex items-center justify-center space-x-3 flex-wrap">
-                    <button onclick="switchTab('schedule')" id="nav-schedule" class="text-base font-medium text-[#1a73e8] hover:text-[#1a73e8] transition py-2 px-1">Schedule</button>
+                    <button onclick="switchTab('schedule')" id="nav-schedule" class="text-base font-medium text-[#1a73e8] hover:text-[#1a73e8] transition cursor-pointer py-2 px-1">Schedule</button>
                     <span class="text-base font-medium text-gray-400">|</span>
-                    <button onclick="switchTab('about')" id="nav-about" class="text-base font-medium text-gray-600 hover:text-[#1a73e8] transition py-2 px-1">About Us</button>
-                    <span class="text-base font-medium text-gray-400">|</span>
-                    <button onclick="switchTab('photos')" id="nav-photos" class="text-base font-medium text-gray-600 hover:text-[#1a73e8] transition cursor-pointer py-2 px-1">Photos</button>
+                    <button onclick="switchTab('about')" id="nav-about" class="text-base font-medium text-gray-600 hover:text-[#1a73e8] transition cursor-pointer py-2 px-1">About Us</button>
                     <span class="text-base font-medium text-gray-400">|</span>
                     <button onclick="openModal()" class="text-base font-medium text-gray-600 hover:text-[#1a73e8] transition cursor-pointer py-2 px-1">Contact</button>
+                    <span class="text-base font-medium text-gray-400 hidden sm:inline">|</span>
+                    
+                    <!-- Social Media Icons -->
+                    <div class="flex items-center space-x-1 pl-1">
+                        <a href="https://www.facebook.com/profile.php?id=61591736077099" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-[#1877F2] transition p-1.5 rounded-lg hover:bg-gray-100/80 cursor-pointer" title="Facebook">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="https://www.instagram.com/chestnutboarding/" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-[#E4405F] transition p-1.5 rounded-lg hover:bg-gray-100/80 cursor-pointer" title="Instagram">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                        </a>
+                        <a href="https://nextdoor.com/page/chestnut-boarding/" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-[#00B246] transition p-1.5 rounded-lg hover:bg-gray-100/80 cursor-pointer" title="Nextdoor">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.004 0L0 8.65v15.35h24V8.65L12.004 0zm0 3.167l8.691 6.262v11.404H3.305V9.429l8.699-6.262z m-.048 5.766c-1.396 0-2.585.645-3.328 1.638v-1.314H5.972v8.528h2.656v-4.529c0-1.21.848-2.098 2.018-2.098 1.17 0 1.938.888 1.938 2.098v4.529h2.656v-4.852c0-2.42-1.574-3.999-3.284-3.999z"/></svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -195,63 +207,21 @@
             </div>
         </div>
 
-        <!-- Photos View -->
-        <div id="photosView" class="hidden">
-            <div class="bg-white/75 backdrop-blur-md p-8 rounded-xl shadow-sm border border-gray-200">
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/cPlun05.jpeg" alt="Dog" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/2G4duPM.jpeg" alt="Dog" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/sYR0cQw.jpeg" alt="Dog" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/iyH9Nyb.jpeg" alt="Dog" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/9d1RdYn.jpeg" alt="Dog" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/te38jbL.jpeg" alt="Dog" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/Ao5jDR2.jpeg" alt="Chestnut Boarding Photo" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/i1sjwwf.jpeg" alt="Chestnut Boarding Photo" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/Ew9F60Q.jpeg" alt="Chestnut Boarding Photo" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/wbSX7hY.jpeg" alt="Chestnut Boarding Photo" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/Vlh47pQ.jpeg" alt="Chestnut Boarding Photo" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/BcRCkbs.jpeg" alt="Chestnut Boarding Photo" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/p7qYLIa.jpeg" alt="Chestnut Boarding Photo" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/0Qor7xT.jpeg" alt="Chestnut Boarding Photo" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                    <div class="overflow-hidden rounded-xl shadow-sm border border-gray-200 bg-white">
-                        <img src="https://i.imgur.com/F6uMcYr.jpeg" alt="Chestnut Boarding Photo" onclick="openImageModal(this.src)" class="w-full h-64 object-cover hover:scale-105 transition-transform duration-300 cursor-pointer">
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </main>
 
     <footer class="bg-white/75 backdrop-blur-md border-t border-gray-200 mt-16 py-8">
         <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="https://www.facebook.com/profile.php?id=61591736077099" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-[#1877F2] transition" title="Facebook">
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/chestnutboarding/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-[#E4405F] transition" title="Instagram">
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href="https://nextdoor.com/page/chestnut-boarding/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-[#00B246] transition" title="Nextdoor">
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M12.004 0L0 8.65v15.35h24V8.65L12.004 0zm0 3.167l8.691 6.262v11.404H3.305V9.429l8.699-6.262z m-.048 5.766c-1.396 0-2.585.645-3.328 1.638v-1.314H5.972v8.528h2.656v-4.529c0-1.21.848-2.098 2.018-2.098 1.17 0 1.938.888 1.938 2.098v4.529h2.656v-4.852c0-2.42-1.574-3.999-3.284-3.999z"/></svg>
+                </a>
+            </div>
             <p class="text-gray-500 text-sm">© 2026 Chestnut Boarding. All rights reserved.</p>
             <p class="text-gray-400 text-xs mt-1">Contact: chestnutboarding@gmail.com | 719-641-8340</p>
         </div>
@@ -285,21 +255,31 @@
                         </svg>
                     </button>
                 </div>
+                
+                <!-- Social Media Buttons Row -->
+                <div class="pt-2 border-t border-gray-200">
+                    <p class="text-xs text-gray-500 mb-2 font-medium">Connect on social media:</p>
+                    <div class="flex items-center justify-between gap-2">
+                        <a href="https://www.facebook.com/profile.php?id=61591736077099" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center space-x-1.5 bg-[#f8f9fa] hover:bg-gray-100 text-gray-700 hover:text-[#1877F2] border border-gray-200 px-2 py-2 rounded-xl transition text-xs font-medium cursor-pointer">
+                            <svg class="w-4 h-4 fill-current text-[#1877F2]" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                            <span>Facebook</span>
+                        </a>
+                        <a href="https://www.instagram.com/chestnutboarding/" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center space-x-1.5 bg-[#f8f9fa] hover:bg-gray-100 text-gray-700 hover:text-[#E4405F] border border-gray-200 px-2 py-2 rounded-xl transition text-xs font-medium cursor-pointer">
+                            <svg class="w-4 h-4 fill-current text-[#E4405F]" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                            <span>Instagram</span>
+                        </a>
+                        <a href="https://nextdoor.com/page/chestnut-boarding/" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center space-x-1.5 bg-[#f8f9fa] hover:bg-gray-100 text-gray-700 hover:text-[#00B246] border border-gray-200 px-2 py-2 rounded-xl transition text-xs font-medium cursor-pointer">
+                            <svg class="w-4 h-4 fill-current text-[#00B246]" viewBox="0 0 24 24"><path d="M12.004 0L0 8.65v15.35h24V8.65L12.004 0zm0 3.167l8.691 6.262v11.404H3.305V9.429l8.699-6.262z m-.048 5.766c-1.396 0-2.585.645-3.328 1.638v-1.314H5.972v8.528h2.656v-4.529c0-1.21.848-2.098 2.018-2.098 1.17 0 1.938.888 1.938 2.098v4.529h2.656v-4.852c0-2.42-1.574-3.999-3.284-3.999z"/></svg>
+                            <span>Nextdoor</span>
+                        </a>
+                    </div>
+                </div>
+
             </div>
             <div class="mt-6 flex justify-end">
-                <button onclick="closeModal()" class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-6 rounded-lg hover:bg-gray-50 transition">Close</button>
+                <button onclick="closeModal()" class="bg-white border border-gray-300 text-gray-700 font-medium py-2 px-6 rounded-lg hover:bg-gray-50 transition cursor-pointer">Close</button>
             </div>
         </div>
-    </div>
-
-    <!-- Image Viewer Modal -->
-    <div id="imageModal" class="fixed inset-0 z-[60] hidden bg-gray-900 bg-opacity-90 overflow-y-auto h-full w-full flex items-center justify-center backdrop-blur-sm cursor-pointer">
-        <button onclick="closeImageModal()" class="absolute top-4 right-4 text-gray-300 hover:text-white transition p-2 z-10">
-            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-        <img id="modalImage" src="" alt="Full size" class="max-h-[85vh] max-w-full object-contain rounded shadow-2xl pointer-events-auto">
     </div>
 
     <!-- Agreement Modal -->
@@ -307,7 +287,7 @@
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl relative flex flex-col max-h-full">
             <div class="flex justify-between items-center p-4 sm:p-6 border-b border-gray-200 sticky top-0 bg-white rounded-t-xl z-10">
                 <h2 class="text-xl font-medium text-gray-900">Boarding Agreement</h2>
-                <button onclick="closeAgreementModal()" class="text-gray-400 hover:text-gray-700 transition focus:outline-none">
+                <button onclick="closeAgreementModal()" class="text-gray-400 hover:text-gray-700 transition focus:outline-none cursor-pointer">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -325,18 +305,6 @@
     <script>
         function openModal() { document.getElementById('contactModal').classList.remove('hidden'); }
         function closeModal() { document.getElementById('contactModal').classList.add('hidden'); }
-        
-        function openImageModal(src) {
-            const modal = document.getElementById('imageModal');
-            document.getElementById('modalImage').src = src;
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeImageModal() {
-            document.getElementById('imageModal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
 
         function openAgreementModal() {
             document.getElementById('agreementModal').classList.remove('hidden');
@@ -349,8 +317,8 @@
         }
 
         function switchTab(tab) {
-            ['scheduleView', 'aboutView', 'photosView'].forEach(v => document.getElementById(v).classList.add('hidden'));
-            ['nav-schedule', 'nav-about', 'nav-photos'].forEach(n => {
+            ['scheduleView', 'aboutView'].forEach(v => document.getElementById(v).classList.add('hidden'));
+            ['nav-schedule', 'nav-about'].forEach(n => {
                 const el = document.getElementById(n);
                 el.classList.remove('text-[#1a73e8]');
                 el.classList.add('text-gray-600');
@@ -362,7 +330,7 @@
             activeNav.classList.add('text-[#1a73e8]');
 
             const infoGrid = document.getElementById('sharedInfoGridWrapper');
-            tab === 'photos' ? infoGrid.classList.add('hidden') : infoGrid.classList.remove('hidden');
+            infoGrid.classList.remove('hidden');
         }
 
         function copyTextToClipboard(text) {
@@ -388,7 +356,6 @@
 
         window.onclick = function(event) {
             if (event.target === document.getElementById('contactModal')) closeModal();
-            if (event.target === document.getElementById('imageModal')) closeImageModal();
             if (event.target === document.getElementById('agreementModal')) closeAgreementModal();
         }
     </script>
